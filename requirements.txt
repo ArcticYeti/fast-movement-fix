@@ -1,0 +1,8 @@
+beet==0.103.1
+mecha==0.87.0
+bolt==0.45.0
+wicked-expressions==1.6.2
+lightning-rod==1.0.0
+crankshaft==1.0.0
+pandas==2.2.0
+matplotlib==3.8.2

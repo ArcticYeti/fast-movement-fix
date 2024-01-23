@@ -1,0 +1,8 @@
+.vscode/
+
+__pycache__/
+*.py[cod]
+
+dist/
+
+.beet_cache/

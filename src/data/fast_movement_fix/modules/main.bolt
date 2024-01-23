@@ -1,0 +1,68 @@
+from wicked_expressions:api import Var, qInt, Scoreboard
+from lightning_rod:api import add_tag, remove_tag
+from crankshaft:api import event, flag
+from ./helpers import mc_return
+
+def launch_looking(strength):
+    strength_argument = Scoreboard('delta.api.launch')['$strength']
+
+    if strength > 0:
+        strength_argument = strength
+        function delta:api/launch_looking
+
+@event
+def load():
+    say loaded!
+
+BASE_FALL_STRENGTH = 2.0
+BASE_JUMP_STRENGTH = 3.0 
+JUMPED_TAG = 'fast_movement_fix.jumped'
+
+def get_movement_speed():
+    movement_speed = Var(qInt)
+    
+    with movement_speed.store():
+        attribute @s minecraft:generic.movement_speed get 10000
+
+    return movement_speed
+
+def calculate_jump_push_strength(movement_speed):
+    push_strength = Var(qInt)
+    BASE_SPRINT_MOVEMENT_SPEED = 1300
+
+    push_strength = BASE_JUMP_STRENGTH * (movement_speed - BASE_SPRINT_MOVEMENT_SPEED)
+    return push_strength
+
+def calculate_fall_push_strength(movement_speed):
+    fall_strength = Var(qInt)
+    BASE_SPRINT_MOVEMENT_SPEED = 1300
+
+    fall_strength = BASE_FALL_STRENGTH * (movement_speed - BASE_SPRINT_MOVEMENT_SPEED)
+    return fall_strength
+
+@event
+def player_jump():
+    if flag.is_sprinting == False:
+        mc_return
+
+    rotated ~ 0:
+        push_strength = calculate_jump_push_strength(get_movement_speed())
+        # tellraw @s ["jump strength: ", push_strength]
+        launch_looking(push_strength)
+
+    add_tag(JUMPED_TAG)
+
+@event
+def player_airborne_start():
+    if flag.is_sprinting == False:
+        mc_return
+
+    if entity @s[tag=!JUMPED_TAG] rotated ~ 35:
+        push_strength = calculate_fall_push_strength(get_movement_speed())
+        # tellraw @s ["fall strength: ", push_strength]
+        launch_looking(push_strength)
+
+    remove_tag(JUMPED_TAG)
+
+# delta has to be loaded last for proper tick timing
+merge function_tag minecraft:load {"values": ["delta:internal/technical/load"]}

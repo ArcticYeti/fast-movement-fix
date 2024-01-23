@@ -1,0 +1,5 @@
+macro mc_return value=brigadier:integer:
+    execute return value
+
+macro mc_return:
+    execute return 1

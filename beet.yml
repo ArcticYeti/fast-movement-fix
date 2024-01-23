@@ -1,0 +1,24 @@
+output: 'dist'
+name: 'fast_movement_fix'
+
+require:
+  - bolt
+  - wicked_expressions
+  - lightning_rod
+  - crankshaft
+
+pipeline:
+  - mecha
+
+data_pack:
+  name: 'Fast Movement Fix'
+  description: 'https://github.com/ArcticYeti'
+  zipped: true
+  pack_format: 26
+  load: 
+    data: 'src/data'
+    pack.png: 'resources/pack.png'
+
+meta:
+  bolt:
+    entrypoint: '*:main'
