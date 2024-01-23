@@ -3,20 +3,16 @@ from lightning_rod:api import add_tag, remove_tag
 from crankshaft:api import event, flag
 from ./helpers import mc_return
 
+BASE_FALL_STRENGTH = 2.0
+BASE_JUMP_STRENGTH = 3.0 
+JUMPED_TAG = 'fast_movement_fix.jumped'
+
 def launch_looking(strength):
     strength_argument = Scoreboard('delta.api.launch')['$strength']
 
     if strength > 0:
         strength_argument = strength
         function delta:api/launch_looking
-
-@event
-def load():
-    say loaded!
-
-BASE_FALL_STRENGTH = 2.0
-BASE_JUMP_STRENGTH = 3.0 
-JUMPED_TAG = 'fast_movement_fix.jumped'
 
 def get_movement_speed():
     movement_speed = Var(qInt)
